@@ -53,6 +53,11 @@ table {
 	background:#33CC33;
 }
 
+.wait {
+	background:yellow;
+}
+
+
 .err {
 	background:#FF0000;
 }
@@ -69,3 +74,4 @@ td {
 .server_select {
 	text-align: center;
 }
+

@@ -19,10 +19,10 @@
       %th refresh
     %tbody
       - @counts.each do |count|
-        %tr{:class => "#{count.diff == 0 ? 'ok' : 'err'}"}
+        %tr{:class => "#{count.diff == 0 ? 'ok' : 'err'}", :id => "row_#{count.tabid}"}
           %td= count.name
-          %td= count.rc1.round
-          %td= count.rc2.round
-          %td= count.diff.round
+          %td{:id => "count1_#{count.tabid}"}= count.rc1.round
+          %td{:id => "count2_#{count.tabid}"}= count.rc2.round
+          %td{:id => "diff_#{count.tabid}"}= count.diff.round
           %td{:class => 'button_cell'}
-            %input{:type => 'button', :value => 'refresh', :onclick => "refresh_counts(#{count.tabid}, #{@server1.id}, #{@server2.id})"} 
+            %input{:type => 'button', :value => 'refresh', :onclick => "refresh_counts(this, #{count.tabid}, #{@server1.id}, #{@server2.id})"} 

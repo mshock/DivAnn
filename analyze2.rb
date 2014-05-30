@@ -82,7 +82,3 @@ else
   end
 end
 DISDB.connection.disconnect!
-
-
-
-
