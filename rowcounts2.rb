@@ -84,7 +84,7 @@ post '/counts_json' do
   table = Table.get params[:table_id]
   
   system("rubyw analyze2.rb --server #{server1.name} --table #{table.id}")
-  #system("rubyw analyze2.rb --server #{server2.name} --table #{table.id}")
+  system("rubyw analyze2.rb --server #{server2.name} --table #{table.id}")
   
   query = "
     select c1.count as rc1, c2.count as rc2, (c1.count - c2.count) as diff
