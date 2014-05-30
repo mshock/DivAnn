@@ -1,0 +1,25 @@
+!!!
+%html
+  %head
+    %title Divergence Analysis App
+    %link(rel="stylesheet" href="/styles.css")
+    %script{:type => 'text/javascript', :src => '/jquery-1.11.1.min.js'}
+    %script{:type => 'text/javascript', :src => '/js.js'}
+  %body
+    #wrapper
+      #content
+        .menu
+          %table
+            %tr
+              %td{:class => 'default'}
+                %a{:href => '/'} home
+            %tr
+              %td{:class => 'default'}
+                %a{:href => '/counts'} counts
+            %tr
+              %td{:class => 'default'}
+                %a{:href => '/tables'} tables
+            %tr
+              %td{:class => 'default'}
+                %a{:href => '/servers'} servers
+        =yield

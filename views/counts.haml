@@ -1,0 +1,23 @@
+%h1 Counts
+%form{:action => '/counts', :method => 'POST'}
+  .server_select
+    %select{:name => 'server1'}
+      - @servers.each do |server|
+        %option{:value => "#{server.id}", :selected => @server1.nil? ? false : (@server1.id == server.id ? true : false)}= server.name.upcase
+    %select{:name => 'server2'}
+      - @servers.each do |server|
+        %option{:value => "#{server.id}", :selected => @server2.nil? ? false : (@server2.id == server.id ? true : false)}= server.name.upcase
+    %input{:type => 'submit', :value => 'compare'}
+%br
+- unless @counts.nil?
+  %table
+    %thead
+      %th table
+      %th= @server1.name
+      %th= @server2.name
+    %tbody
+      - @counts.each do |count|
+        %tr{:class => "#{count.rc1 == count.rc2 ? 'ok' : 'err'}"}
+          %td= count.name
+          %td= count.rc1.round
+          %td= count.rc2.round

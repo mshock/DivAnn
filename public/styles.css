@@ -1,0 +1,71 @@
+body {
+	background:lightgrey;
+}
+
+h1 {
+	text-align:center;
+}
+
+h4 {
+	text-align:center;
+	color: darkred;
+}
+
+a {
+	color: black;
+}
+a:hover {
+	color: darkred;
+}
+
+
+table {
+ margin: 0 auto;
+ width: 50%;
+ border: 1px solid black;
+}
+
+.menu {
+	border: 1px solid black;
+	float: left;
+	padding: 5px;
+	background: #EBEBEB;
+}
+
+.button_cell {
+	text-align:center;
+	white-space: nowrap;
+}
+
+.table_cell {
+	width: 99%;
+}
+
+.server_td {
+	width: 50%;
+}
+
+.default {
+	background:#96957E;
+}
+
+.ok {
+	background:#33CC33;
+}
+
+.err {
+	background:#FF0000;
+}
+
+th {
+	background: darkgrey;
+}
+
+td {
+
+	border: 1px solid black;
+}
+
+.server_select {
+	text-align: center;
+}

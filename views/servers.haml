@@ -1,0 +1,11 @@
+%h1 Servers
+%table
+  %thead
+    %th name
+    %th ip
+  %tbody
+    - @servers.each do |server|
+      %tr{:class => 'default'}
+        %td
+          %a{:href => "/tables/#{server.id}"}= server.name
+        %td= server.ip
