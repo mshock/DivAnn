@@ -58,7 +58,7 @@ post '/counts' do
   @server2 = Server.get params[:server2]
   
   query = "
-    select t.name, c1.count as rc1, c2.count as rc2, abs(c1.count - c2.count) as diff, c1.table_id as tabid
+    select t.name, c1.count as rc1, c2.count as rc2, (c1.count - c2.count) as diff, c1.table_id as tabid
     from counts c1 
     join counts c2 
     on c1.table_id = c2.table_id
@@ -68,6 +68,7 @@ post '/counts' do
     and c2.timestamp = (select max(timestamp) from counts where table_id = c2.table_id and server_id = c2.server_id)
     join tables t
     on c1.table_id = t.id
+    and t.enabled = 't'
     order by t.name
   "
    
@@ -86,7 +87,7 @@ post '/counts_json' do
   #system("rubyw analyze2.rb --server #{server2.name} --table #{table.id}")
   
   query = "
-    select c1.count as rc1, c2.count as rc2, abs(c1.count - c2.count) as diff
+    select c1.count as rc1, c2.count as rc2, (c1.count - c2.count) as diff
     from counts c1 
     join counts c2 
     on c1.table_id = c2.table_id
