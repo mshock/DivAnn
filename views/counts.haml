@@ -15,9 +15,14 @@
       %th table
       %th= @server1.name
       %th= @server2.name
+      %th diff
+      %th refresh
     %tbody
       - @counts.each do |count|
-        %tr{:class => "#{count.rc1 == count.rc2 ? 'ok' : 'err'}"}
+        %tr{:class => "#{count.diff == 0 ? 'ok' : 'err'}"}
           %td= count.name
           %td= count.rc1.round
           %td= count.rc2.round
+          %td= count.diff.round
+          %td{:class => 'button_cell'}
+            %input{:type => 'button', :value => 'refresh', :onclick => "refresh_counts(#{count.tabid}, #{@server1.id}, #{@server2.id})"} 

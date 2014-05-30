@@ -6,6 +6,7 @@ require 'trollop'
 
 opts = Trollop::options do
   opt :server, 'target server name', :type => :string
+  opt :table, 'target table (optional)', :type => :string
   opt :initdb, 'drop/create tables'
   opt :debug, 'debug output' 
 end
