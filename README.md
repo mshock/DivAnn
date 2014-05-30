@@ -22,7 +22,7 @@ Opts:
 
 #### required gems
 
--- active_record - db orm for SQL Server (only one that doesn't require extra work to get adapter online)
--- data_mapper - db orm (simple SQLite interfacing)
--- trollop - opts parsing
--- haml - for views
+- active_record - db orm for SQL Server (only one that doesn't require extra work to get adapter online)
+- data_mapper - db orm (simple SQLite interfacing)
+- trollop - opts parsing
+- haml - for views

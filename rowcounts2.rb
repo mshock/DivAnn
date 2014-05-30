@@ -57,18 +57,18 @@ post '/counts' do
   @server2 = Server.get params[:server2]
   
   query = "
-   select t.name, c1.count as rc1, c2.count as rc2, abs(c1.count - c2.count) as diff, c1.table_id as tabid
-   from counts c1 
-   join counts c2 
-   on c1.table_id = c2.table_id
-   and c1.server_id = #{@server1.id}
-   and c2.server_id = #{@server2.id}
-   and c1.timestamp = (select max(timestamp) from counts where table_id = c1.table_id and server_id = c1.server_id)
-   and c2.timestamp = (select max(timestamp) from counts where table_id = c2.table_id and server_id = c2.server_id)
-   join tables t
-   on c1.table_id = t.id
-   order by t.name
- "
+    select t.name, c1.count as rc1, c2.count as rc2, abs(c1.count - c2.count) as diff, c1.table_id as tabid
+    from counts c1 
+    join counts c2 
+    on c1.table_id = c2.table_id
+    and c1.server_id = #{@server1.id}
+    and c2.server_id = #{@server2.id}
+    and c1.timestamp = (select max(timestamp) from counts where table_id = c1.table_id and server_id = c1.server_id)
+    and c2.timestamp = (select max(timestamp) from counts where table_id = c2.table_id and server_id = c2.server_id)
+    join tables t
+    on c1.table_id = t.id
+    order by t.name
+  "
    
   @counts = repository(:default).adapter.select(query);
   
