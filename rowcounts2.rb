@@ -52,18 +52,16 @@ end
 
 
 post '/counts' do
-  @servers = Server.all(:order => :name)
-  
-  @server1 = Server.get params[:server1]
-  @server2 = Server.get params[:server2]
+  @servers = Server.all(:order => :name, :name.not => 'tt8')
+  @server = Server.get params[:server]
   
   query = "
     select t.name, c1.count as rc1, c2.count as rc2, (c1.count - c2.count) as diff, c1.table_id as tabid, c1.timestamp as t1, c2.timestamp as t2
     from counts c1 
     join counts c2 
     on c1.table_id = c2.table_id
-    and c1.server_id = #{@server1.id}
-    and c2.server_id = #{@server2.id}
+    and c1.server_id = #{@server.id}
+    and c2.server_id = (select id from servers where name = 'tt8')
     and c1.timestamp = (select max(timestamp) from counts where table_id = c1.table_id and server_id = c1.server_id)
     and c2.timestamp = (select max(timestamp) from counts where table_id = c2.table_id and server_id = c2.server_id)
     join tables t
@@ -79,12 +77,12 @@ end
 
 post '/counts_json' do
   
-  server1 = Server.get params[:server1]
-  server2 = Server.get params[:server2]
+  tt8 = Server.first(:name => 'tt8')
+  server = Server.get params[:server2]
   table = Table.get params[:table_id]
   
-  system("rubyw analyze2.rb --server #{server1.name} --table #{table.id}")
-  system("rubyw analyze2.rb --server #{server2.name} --table #{table.id}")
+  system("rubyw analyze2.rb --server #{tt8.name} --table #{table.id}")
+  system("rubyw analyze2.rb --server #{server.name} --table #{table.id}")
   
   query = "
     select c1.count as rc1, c2.count as rc2, (c1.count - c2.count) as diff
@@ -92,8 +90,8 @@ post '/counts_json' do
     join counts c2 
     on c1.table_id = c2.table_id
     and c1.table_id = #{table.id}
-    and c1.server_id = #{server1.id}
-    and c2.server_id = #{server2.id}
+    and c1.server_id = #{tt8.id}
+    and c2.server_id = #{server.id}
     and c1.timestamp = (select max(timestamp) from counts where table_id = c1.table_id and server_id = c1.server_id)
     and c2.timestamp = (select max(timestamp) from counts where table_id = c2.table_id and server_id = c2.server_id)
   "

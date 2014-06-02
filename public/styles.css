@@ -28,10 +28,21 @@ table {
 .menu {
 	border: 1px solid black;
 	float: left;
+	position:fixed;
 	padding: 5px;
 	background: #EBEBEB;
 }
 
+.export {
+	float: right;
+	width: 10%;
+}
+.export_fixed {
+	border: 1px solid black;
+	position: fixed;
+	padding: 5px;
+	background: #EBEBEB;
+}
 .button_cell {
 	text-align:center;
 	white-space: nowrap;

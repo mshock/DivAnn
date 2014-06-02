@@ -12,12 +12,12 @@ function toggle_table(table_id) {
 	}	
 }
 
-function refresh_counts(e, table_id, server1_id, server2_id) {
+function refresh_counts(e, table_id, server_id) {
 	$(e).val('loading...');
 	var $row = $(e).closest('tr');
 	$row.removeClass('ok err');
 	$row.addClass('wait');
-	$.post('/counts_json', {table_id: table_id, server1: server1_id, server2: server2_id})
+	$.post('/counts_json', {table_id: table_id, server: server_id})
 		.done(function (data) {
 			var obj = jQuery.parseJSON(data);
 			$('#count1_' + table_id).html(obj.rc1);
