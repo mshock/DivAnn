@@ -40,6 +40,13 @@ table {
 	background: #EBEBEB;
 }
 
+#loading {
+	position: absolute;
+	top: 50%;
+	left: 40%;
+	
+}
+
 .export {
 	float: right;
 	width: 10%;

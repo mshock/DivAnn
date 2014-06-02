@@ -5,33 +5,19 @@
       %b= "#{@gold_server.upcase} @"
       =@last
     %b Ingestion: 
-    %select{:name => 'server'}
+    %select{:name => 'server', :id => 'server_select'}
       - @servers.each do |server|
         %option{:value => "#{server.id}", :selected => @server.nil? ? false : (@server.id == server.id ? true : false)}= server.name.upcase
     %b Feed ID:
-    %select{:name => 'feed'}
+    %select{:name => 'feed', :id => 'feed_select'}
       - @feeds.each do |feed|
         %option{:value => "#{feed.id}", :selected => @feed.nil? ? false : (@feed.id == feed.id ? true : false)}= feed.name.upcase
-    %input{:type => 'submit', :value => 'Run Now'}
+    %input{:type => 'button', :value => 'Run Now', :onclick => "run_counts(this)"}
+    %input{:type => 'submit', :value => 'Get Last'}
     %br
     %br
-  - unless @counts.nil?
-    .export
-      .export_fixed
-        %input{:type => 'button', :value => 'export'}
-    %table
-      %thead
-        %th table
-        %th= @gold_server
-        %th= @server.name
-        %th diff
-        %th refresh
-      %tbody
-        - @counts.each do |count|
-          %tr{:class => "#{count.diff == 0 ? 'ok' : 'err'}", :id => "row_#{count.tabid}"}
-            %td= count.name
-            %td{:id => "count1_#{count.tabid}", :title => "#{count.t1}"}= count.rc1.round
-            %td{:id => "count2_#{count.tabid}", :title => "#{count.t2}"}= count.rc2.round
-            %td{:id => "diff_#{count.tabid}"}= count.diff.round
-            %td{:class => 'button_cell'}
-              %input{:type => 'button', :value => 'refresh', :onclick => "refresh_counts(this, #{count.tabid}, #{@server.id})"} 
+    %img#loading{:src => 'loading.gif'}
+    #results
+    - unless @counts.nil?
+      = haml :counts_partial
+    

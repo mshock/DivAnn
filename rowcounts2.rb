@@ -64,16 +64,16 @@ post '/counts' do
   
   @last = `rubyw analyze2.rb --last --server #{@gold_server}`
   
-  system("rubyw analyze2.rb --server #{@server.name} --feed #{@feed.id}")
-  system("rubyw analyze2.rb --server #{@gold_server} --feed #{@feed.id}")
-  
+  # system("rubyw analyze2.rb --server #{@server.name} --feed #{@feed.id}")
+  # system("rubyw analyze2.rb --server #{@gold_server} --feed #{@feed.id}")
+   
   query = "
     select t.name, c1.count as rc1, c2.count as rc2, (c1.count - c2.count) as diff, c1.table_id as tabid, c1.timestamp as t1, c2.timestamp as t2
     from counts c1 
     join counts c2 
     on c1.table_id = c2.table_id
-    and c1.server_id = #{@server.id}
-    and c2.server_id = (select id from servers where name = '#{@gold_server}')
+    and c1.server_id = (select id from servers where name = '#{@gold_server}')
+    and c2.server_id = #{@server.id}
     and c1.timestamp = (select max(timestamp) from counts where table_id = c1.table_id and server_id = c1.server_id)
     and c2.timestamp = (select max(timestamp) from counts where table_id = c2.table_id and server_id = c2.server_id)
     join tables t
@@ -118,6 +118,40 @@ post '/counts_json' do
   
   Hash[counts.each_pair.to_a].to_json
   
+end
+
+post '/counts_json2' do
+  
+  @gold_server = gold_server
+  @servers = Server.all(:order => :name, :name.not => @gold_server)
+  @server = Server.get params[:server_id]
+  @feed = Feed.get params[:feed_id]
+  @feeds = Feed.all(:order => :name, :enabled => true)
+  
+  @last = `rubyw analyze2.rb --last --server #{@gold_server}`
+  
+  system("rubyw analyze2.rb --server #{@server.name} --feed #{@feed.id}")
+  system("rubyw analyze2.rb --server #{@gold_server} --feed #{@feed.id}")
+   
+  query = "
+    select t.name, c1.count as rc1, c2.count as rc2, (c1.count - c2.count) as diff, c1.table_id as tabid, c1.timestamp as t1, c2.timestamp as t2
+    from counts c1 
+    join counts c2 
+    on c1.table_id = c2.table_id
+    and c1.server_id = (select id from servers where name = '#{@gold_server}')
+    and c2.server_id = #{@server.id}
+    and c1.timestamp = (select max(timestamp) from counts where table_id = c1.table_id and server_id = c1.server_id)
+    and c2.timestamp = (select max(timestamp) from counts where table_id = c2.table_id and server_id = c2.server_id)
+    join tables t
+    on c1.table_id = t.id
+    and t.enabled = 't'
+    and t.feed_id = #{@feed.id}
+    order by t.name
+  "
+   
+  @counts = repository(:default).adapter.select(query);
+  
+  haml :counts_partial, :layout => false
 end
 
 get '/servers' do 

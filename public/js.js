@@ -1,4 +1,7 @@
 // jquery functions for rowcounts
+$(document).ready(function(){
+	$('#loading').hide();
+});
 
 
 function toggle_table(e, table_id) {
@@ -26,6 +29,7 @@ function toggle_feed(e, feed_id) {
 
 function refresh_counts(e, table_id, server_id) {
 	$(e).val('loading...');
+	$(e).attr('disabled', true);
 	var $row = $(e).closest('tr');
 	$row.removeClass('ok err');
 	$row.addClass('wait');
@@ -36,6 +40,7 @@ function refresh_counts(e, table_id, server_id) {
 			$('#count2_' + table_id).html(obj.rc2);
 			$('#diff_' + table_id).html(obj.diff);
 			$(e).val('refresh');
+			$(e).attr('disabled', false);
 			$row.removeClass('wait');
 			if (obj.diff == 0) {
 				$row.toggleClass('ok');
@@ -44,5 +49,19 @@ function refresh_counts(e, table_id, server_id) {
 				$row.toggleClass('err');
 			}
 		}, 'json');
+}
 
+function run_counts(e) {
+	$(e).val('loading...');
+	$(e).attr('disabled', true);
+	$('#results').hide();
+	$('#loading').show();
+	$.post('/counts_json2', {server_id: $('#server_select').val(), feed_id: $('#feed_select').val()})
+		.done(function (data) {
+			$(e).val('Run Now');
+			$(e).attr('disabled', false);
+			$('#loading').hide();
+			$('#results').html(data);
+			$('#results').show();
+	});
 }
