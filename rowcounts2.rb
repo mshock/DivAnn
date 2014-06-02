@@ -58,7 +58,7 @@ post '/counts' do
   @server2 = Server.get params[:server2]
   
   query = "
-    select t.name, c1.count as rc1, c2.count as rc2, (c1.count - c2.count) as diff, c1.table_id as tabid
+    select t.name, c1.count as rc1, c2.count as rc2, (c1.count - c2.count) as diff, c1.table_id as tabid, c1.timestamp as t1, c2.timestamp as t2
     from counts c1 
     join counts c2 
     on c1.table_id = c2.table_id

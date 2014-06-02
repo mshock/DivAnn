@@ -27,6 +27,7 @@ class Table
   
   has n, :counts
 
+  
 end
 
 class Count
@@ -49,5 +50,7 @@ class ServerTable
   belongs_to :server
   belongs_to :table
 end
+
+
 
 DataMapper.finalize
