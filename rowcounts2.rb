@@ -7,6 +7,8 @@ require 'json'
 
 debug = true
 
+gold_server = 'tt8'
+
 if debug
   DataMapper::Logger.new($stdout, :debug)
 end
@@ -45,23 +47,33 @@ post '/tables' do
 end
 
 get '/counts' do
-  @servers = Server.all(:order => :name)
-  @last = `rubyw analyze2.rb --last --server tt8`
+  @gold_server = gold_server
+  @servers = Server.all(:order => :name, :name.not => @gold_server)
+  @feeds = Feed.all(:order => :name, :enabled => true)
+  @last = `rubyw analyze2.rb --last --server #{@gold_server}`
   haml :counts
 end
 
 
 post '/counts' do
-  @servers = Server.all(:order => :name, :name.not => 'tt8')
+  @gold_server = gold_server
+  @servers = Server.all(:order => :name, :name.not => @gold_server)
   @server = Server.get params[:server]
-  @last = `rubyw analyze2.rb --last --server tt8`
+  @feed = Feed.get params[:feed]
+  @feeds = Feed.all(:order => :name, :enabled => true)
+  
+  @last = `rubyw analyze2.rb --last --server #{@gold_server}`
+  
+  system("rubyw analyze2.rb --server #{@server.name} --feed #{@feed.id}")
+  system("rubyw analyze2.rb --server #{@gold_server} --feed #{@feed.id}")
+  
   query = "
     select t.name, c1.count as rc1, c2.count as rc2, (c1.count - c2.count) as diff, c1.table_id as tabid, c1.timestamp as t1, c2.timestamp as t2
     from counts c1 
     join counts c2 
     on c1.table_id = c2.table_id
     and c1.server_id = #{@server.id}
-    and c2.server_id = (select id from servers where name = 'tt8')
+    and c2.server_id = (select id from servers where name = '#{@gold_server}')
     and c1.timestamp = (select max(timestamp) from counts where table_id = c1.table_id and server_id = c1.server_id)
     and c2.timestamp = (select max(timestamp) from counts where table_id = c2.table_id and server_id = c2.server_id)
     join tables t
@@ -76,12 +88,12 @@ post '/counts' do
 end
 
 post '/counts_json' do
-  
-  tt8 = Server.first(:name => 'tt8')
-  server = Server.get params[:server2]
+  @gold_server = gold_server
+  gold = Server.first(:name => @gold_server)
+  server = Server.get params[:server]
   table = Table.get params[:table_id]
   
-  system("rubyw analyze2.rb --server #{tt8.name} --table #{table.id}")
+  system("rubyw analyze2.rb --server #{gold.name} --table #{table.id}")
   system("rubyw analyze2.rb --server #{server.name} --table #{table.id}")
   
   query = "
@@ -90,7 +102,7 @@ post '/counts_json' do
     join counts c2 
     on c1.table_id = c2.table_id
     and c1.table_id = #{table.id}
-    and c1.server_id = #{tt8.id}
+    and c1.server_id = #{gold.id}
     and c2.server_id = #{server.id}
     and c1.timestamp = (select max(timestamp) from counts where table_id = c1.table_id and server_id = c1.server_id)
     and c2.timestamp = (select max(timestamp) from counts where table_id = c2.table_id and server_id = c2.server_id)

@@ -1,8 +1,8 @@
 %h1 Counts
 %form{:action => '/counts', :method => 'POST'}
   .server_select
-    .tt8_update 
-      %b TT8 @
+    .gold_update 
+      %b= "#{@gold_server.upcase} @"
       =@last
     %b Ingestion: 
     %select{:name => 'server'}
@@ -22,7 +22,7 @@
     %table
       %thead
         %th table
-        %th tt8
+        %th= @gold_server
         %th= @server.name
         %th diff
         %th refresh

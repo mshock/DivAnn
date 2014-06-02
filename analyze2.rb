@@ -75,6 +75,27 @@ def create_nocount(server, dbname, tablename)
   puts 'created'
 end
 
+unless opts[:feed].nil?
+  feed = Feed.get opts[:feed]
+  tables = feed.tables.all(:enabled => true, :order => :name)
+  
+  tables.each do |table|
+    if server.name == 'tt8'
+      print "qai_master.dbo.#{table.name} = "
+      STDOUT.flush 
+      rowcount = DISDB.connection.select_value("select count_big(1) from qai_master.dbo.#{table.name} with (NOLOCK)")
+      feed = Feed.first_or_create({:name => feed.name}, {:enabled => true})
+      table = Table.first_or_create({:name => table.name.downcase}, {:enabled => true, :feed => feed})
+      ServerTable.first_or_create(:table => table, :server => server)
+      Count.create(:count => rowcount, :timestamp => Time.now, :table => table, :server => server)
+      puts rowcount
+    else
+      create_count(server, feed.name, table.name)
+    end
+  end
+  exit
+end
+
 if opts[:nocount].nil? 
   unless opts[:table].nil?
     table = Table.get opts[:table]
