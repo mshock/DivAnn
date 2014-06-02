@@ -79,6 +79,7 @@ post '/counts' do
     join tables t
     on c1.table_id = t.id
     and t.enabled = 't'
+    and t.feed_id = #{@feed.id}
     order by t.name
   "
    
