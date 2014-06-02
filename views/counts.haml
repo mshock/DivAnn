@@ -1,10 +1,18 @@
 %h1 Counts
 %form{:action => '/counts', :method => 'POST'}
   .server_select
+    .tt8_update 
+      %b TT8 @
+      =@last
+    %b Ingestion: 
     %select{:name => 'server'}
       - @servers.each do |server|
         %option{:value => "#{server.id}", :selected => @server.nil? ? false : (@server.id == server.id ? true : false)}= server.name.upcase
-    %input{:type => 'submit', :value => 'compare'}
+    %b Feed ID:
+    %select{:name => 'feed'}
+      - @feeds.each do |feed|
+        %option{:value => "#{feed.id}", :selected => @feed.nil? ? false : (@feed.id == feed.id ? true : false)}= feed.name.upcase
+    %input{:type => 'submit', :value => 'Run Now'}
     %br
     %br
   - unless @counts.nil?

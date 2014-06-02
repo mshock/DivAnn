@@ -46,7 +46,7 @@ end
 
 get '/counts' do
   @servers = Server.all(:order => :name)
-  
+  @last = `rubyw analyze2.rb --last --server tt8`
   haml :counts
 end
 
@@ -54,7 +54,7 @@ end
 post '/counts' do
   @servers = Server.all(:order => :name, :name.not => 'tt8')
   @server = Server.get params[:server]
-  
+  @last = `rubyw analyze2.rb --last --server tt8`
   query = "
     select t.name, c1.count as rc1, c2.count as rc2, (c1.count - c2.count) as diff, c1.table_id as tabid, c1.timestamp as t1, c2.timestamp as t2
     from counts c1 
@@ -108,6 +108,23 @@ post '/counts_json' do
 end
 
 get '/servers' do 
-  @servers = Server.all
+  @servers = Server.all(:order => :name)
   haml :servers
 end
+
+get '/feeds' do
+  @feeds = Feed.all(:order => :name)
+  haml :feeds 
+end
+
+post '/feeds' do
+
+  feed = Feed.get params[:feed_id]
+  if feed.enabled
+    feed.update(:enabled => false)
+  else
+    feed.update(:enabled => true)
+  end
+
+end
+

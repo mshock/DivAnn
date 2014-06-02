@@ -18,11 +18,18 @@ a:hover {
 	color: darkred;
 }
 
+.tt8_update {
+  border: 1px solid black;
+  display: inline-block;
+  padding: 5px;
+  
+}
 
 table {
  margin: 0 auto;
  width: 70%;
  border: 1px solid black;
+ background: #E4EDB7;
 }
 
 .menu {

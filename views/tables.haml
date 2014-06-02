@@ -1,4 +1,4 @@
-%h1{:style => 'text-align:center'}= @server.nil? ? 'All Tables' : "Tables for #{@server.name.upcase}"
+%h1= @server.nil? ? 'All Tables' : "Tables for #{@server.name.upcase}"
 %table
   %thead
     %th toggle
@@ -7,5 +7,5 @@
     - @tables.each do |table|
       %tr{:class => "#{table.enabled ? 'ok' : 'err'}",  :id => "#{table.id}"}
         %td{:class => 'button_cell'}
-          %input{:type => 'button', :value => "#{table.enabled ? 'disable':'enable'}", :class => 'table_button', :onclick => "toggle_table(#{table.id})"}
+          %input{:type => 'button', :value => "#{table.enabled ? 'disable':'enable'}", :class => 'table_button', :onclick => "toggle_table(this, #{table.id})"}
         %td{:class => 'table_cell'}= table.name

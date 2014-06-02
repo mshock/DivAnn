@@ -1,7 +1,7 @@
 // jquery functions for rowcounts
 
 
-function toggle_table(table_id) {
+function toggle_table(e, table_id) {
 	$.post('/tables', {table_id: table_id});
 	$('#' + table_id).toggleClass('ok err');
 	if (this.val() == 'enable') {
@@ -9,6 +9,18 @@ function toggle_table(table_id) {
 	} 
 	else {
 		this.val('enable');
+	}	
+}
+
+function toggle_feed(e, feed_id) {
+	$.post('/feeds', {feed_id: feed_id});
+	$('#' + feed_id).toggleClass('ok err');
+	
+	if ($(e).val() == 'enable') {
+		$(e).val('disable');
+	} 
+	else {
+		$(e).val('enable');
 	}	
 }
 
