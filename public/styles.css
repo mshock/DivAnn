@@ -40,6 +40,11 @@ table {
 	background: #EBEBEB;
 }
 
+.menu a {
+	font-weight: bold;
+}
+
+
 #loading {
 	position: absolute;
 	top: 50%;

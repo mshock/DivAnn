@@ -7,11 +7,11 @@ $(document).ready(function(){
 function toggle_table(e, table_id) {
 	$.post('/tables', {table_id: table_id});
 	$('#' + table_id).toggleClass('ok err');
-	if (this.val() == 'enable') {
-		this.val('disable');
+	if ($(e).val() == 'enable') {
+		$(e).val('disable');
 	} 
 	else {
-		this.val('enable');
+		$(e).val('enable');
 	}	
 }
 

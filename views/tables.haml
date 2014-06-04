@@ -8,4 +8,4 @@
       %tr{:class => "#{table.enabled ? 'ok' : 'err'}",  :id => "#{table.id}"}
         %td{:class => 'button_cell'}
           %input{:type => 'button', :value => "#{table.enabled ? 'disable':'enable'}", :class => 'table_button', :onclick => "toggle_table(this, #{table.id})"}
-        %td{:class => 'table_cell'}= table.name
+        %td{:class => 'table_cell'}= table.name.upcase
