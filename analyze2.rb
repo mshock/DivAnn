@@ -37,8 +37,6 @@ if $db.nil?
   exit
 end
 
-
-
 class DISDB < ActiveRecord::Base
   self.abstract_class = true
   establish_connection $dbconfig[$db]
