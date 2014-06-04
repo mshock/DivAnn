@@ -95,8 +95,7 @@ unless opts[:feed].nil?
   end
   exit
 end
-
-if opts[:nocount].nil? 
+unless opts[:nocount] 
   unless opts[:table].nil?
     table = Table.get opts[:table]
     database = nil
@@ -113,7 +112,7 @@ if opts[:nocount].nil?
     else
       create_count(server, database, table.name)
     end
-  else 
+  else
     puts "storing counts for #{$db}"
     databases.each do |db|
       tables = DISDB.connection.select_values("select name from #{db}.sys.Tables with (NOLOCK) where name not like '%_changes' and schema_id = 1 order by name");
@@ -122,12 +121,12 @@ if opts[:nocount].nil?
       end
     end
   end
-  else 
-    databases.each do |db|
-      tables = DISDB.connection.select_values("select lower(name) from #{db}.sys.Tables with (NOLOCK) where name not like '%_changes' and schema_id = 1 order by name")
-      tables.each do |name|
-        create_nocount(server, db, name)
-      end
+else 
+  databases.each do |db|
+    tables = DISDB.connection.select_values("select lower(name) from #{db}.sys.Tables with (NOLOCK) where name not like '%_changes' and schema_id = 1 order by name")
+    tables.each do |name|
+      create_nocount(server, db, name)
     end
+  end
 end
 DISDB.connection.disconnect!
