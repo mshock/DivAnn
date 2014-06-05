@@ -51,7 +51,7 @@ end
 get '/counts' do
   @gold_server = gold_server
   @servers = Server.all(:order => :name, :name.not => @gold_server)
-  @feeds = Feed.all(:order => :name, :enabled => true)
+  @feeds = Feed.all(:order => :name, :enabled => true, :server => @servers[0])
   @last = `rubyw analyze2.rb --last --server #{@gold_server}`
   haml :counts
 end
@@ -62,7 +62,7 @@ post '/counts' do
   @servers = Server.all(:order => :name, :name.not => @gold_server)
   @server = Server.get params[:server]
   @feed = Feed.get params[:feed]
-  @feeds = Feed.all(:order => :name, :enabled => true)
+  @feeds = Feed.all(:order => :name, :enabled => true, :server => @server)
   
   @last = `rubyw analyze2.rb --last --server #{@gold_server}`
   
@@ -156,10 +156,21 @@ post '/counts_json2' do
   "
   
   
-  @counts = repository(:default).adapter.select(query);
+  @counts = repository(:default).adapter.select(query)
   
   haml :counts_partial, :layout => false
 end
+
+post '/get_feeds' do
+  server = Server.get params[:server_id]
+  
+  @feeds = Feed.all(:order => :name, :enabled => true, :server => server)
+  
+  
+  
+  haml :feeds_partial, :layout => false
+end
+
 
 get '/servers' do 
   @servers = Server.all(:order => :name)

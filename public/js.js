@@ -1,12 +1,19 @@
 // jquery functions for rowcounts
 $(document).ready(function(){
 	$('#loading').hide();
-	
-	$(document).ready(function() 
-		    { 
-		        $("#res_table").tablesorter(); 
-		    } 
-	); 
+
+    $("#res_table").tablesorter();
+    
+    $('#server_select').change(
+    		function() {
+    			e = this;
+    			console.log($(e).val());
+				$.post('/get_feeds', {server_id: $(e).val()})
+					.done(function (data) {
+						console.log(data);
+						$('#feed_select').html(data);
+					});
+    		});
 });
 
 
@@ -98,6 +105,3 @@ function export_results() {
 	a.click();
 }
 
-function refresh_select(e) {
-	
-}

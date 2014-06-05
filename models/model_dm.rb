@@ -12,7 +12,7 @@ class Server
   has n, :tables, :through => :serverTables
   
   has n, :counts
-  
+  has n, :feeds
 end
 
 
@@ -60,6 +60,7 @@ class Feed
   property :enabled, Boolean
   
   has n, :tables
+  belongs_to :server
 end
 
 
