@@ -81,10 +81,13 @@ function export_results() {
 	var contentType = 'text/csv';
 	var csvFile = new Blob(csv, {type: contentType});
 	var a = document.createElement('a');
-	a.download = $('#feed_select option:selected').text() + $('#update').text() + '.csv';
+	var filename = $('#update').text() + '_' + $('#feed_select option:selected').text();
+	filename = filename.replace(/\s/g,'');
+	a.download = filename + '.csv';
 	a.href = window.URL.createObjectURL(csvFile);
 	a.textContent = 'Download CSV';
 	a.dataset.downloadurl = [contentType, a.download, a.href].join(':');
 	document.body.appendChild(a);
+	$(a).hide();
 	a.click();
 }
