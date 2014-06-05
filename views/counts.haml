@@ -1,9 +1,10 @@
 %h1 Counts
 %form{:action => '/counts', :method => 'POST'}
   .server_select
-    .gold_update 
+    .gold_update
       %b= "#{@gold_server.upcase} @"
-      =@last
+      #update
+        =@last
     %b Ingestion: 
     %select{:name => 'server', :id => 'server_select'}
       - @servers.each do |server|

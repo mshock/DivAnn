@@ -65,3 +65,26 @@ function run_counts(e) {
 			$('#results').show();
 	});
 }
+
+function export_results() {
+	var csv = [];
+	$('#res_table tr').each(function (index, tr) {
+		if (index == 0) return;
+		var line = $('td', tr).map(function(index, td){
+			if (index == 4) return;
+			return $(td).text();
+		});
+		csv.push([line[0], line[1], line[2], line[3]].join(',') + "\n");
+	});
+	
+	window.URL = window.webkitURL || window.URL;
+	var contentType = 'text/csv';
+	var csvFile = new Blob(csv, {type: contentType});
+	var a = document.createElement('a');
+	a.download = $('#feed_select option:selected').text() + $('#update').text() + '.csv';
+	a.href = window.URL.createObjectURL(csvFile);
+	a.textContent = 'Download CSV';
+	a.dataset.downloadurl = [contentType, a.download, a.href].join(':');
+	document.body.appendChild(a);
+	a.click();
+}
