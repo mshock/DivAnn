@@ -1,7 +1,7 @@
 .export
   .export_fixed
     %input{:type => 'button', :value => 'export', :onclick => 'export_results()'}
-%table{:id => 'res_table'}
+%table{:id => 'res_table', :class => 'tablesorter'}
   %thead
     %th table
     %th= @gold_server

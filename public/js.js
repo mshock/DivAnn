@@ -1,6 +1,12 @@
 // jquery functions for rowcounts
 $(document).ready(function(){
 	$('#loading').hide();
+	
+	$(document).ready(function() 
+		    { 
+		        $("#res_table").tablesorter(); 
+		    } 
+	); 
 });
 
 
@@ -90,4 +96,8 @@ function export_results() {
 	document.body.appendChild(a);
 	$(a).hide();
 	a.click();
+}
+
+function refresh_select(e) {
+	
 }

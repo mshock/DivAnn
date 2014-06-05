@@ -77,8 +77,18 @@ unless opts[:feed].nil?
   feed = Feed.get opts[:feed]
   tables = feed.tables.all(:enabled => true, :order => :name)
   
+  tables_list = nil
   tables.each do |table|
+    
     if server.name == 'tt8'
+      if tables_list.nil?
+        puts 'getting tables list'
+        tables_list = DISDB.connection.select_values("select lower(name) from qai_master.sys.Tables with (NOLOCK) where name not like '%_changes' and schema_id = 1 order by name")
+      end
+      unless tables_list.include? table.name.downcase
+        puts "table not found: " + table.name
+        next
+      end
       print "qai_master.dbo.#{table.name} = "
       STDOUT.flush 
       rowcount = DISDB.connection.select_value("select count_big(1) from qai_master.dbo.#{table.name} with (NOLOCK)")
@@ -99,7 +109,7 @@ unless opts[:nocount]
     database = nil
     databases.each do |db|
       puts "checking #{db}"
-      tables = DISDB.connection.select_values("select lower(name) from #{db}.sys.Tables with (NOLOCK) where name not like '%_changes' and schema_id = 1 order by name");
+      tables = DISDB.connection.select_values("select lower(name) from #{db}.sys.Tables with (NOLOCK) where name not like '%_changes' and schema_id = 1 order by name")
       if tables.include? table.name.downcase
         database = db
         break
