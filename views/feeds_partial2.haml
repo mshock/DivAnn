@@ -7,4 +7,4 @@
       %tr{:class => "#{feed.enabled ? 'ok' : 'err'}",  :id => "#{feed.id}"}
         %td{:class => 'button_cell'}
           %input{:type => 'button', :value => "#{feed.enabled ? 'disable':'enable'}", :class => 'table_button', :onclick => "toggle_feed(this, #{feed.id})"}
-        %td{:class => 'table_cell'}= feed.name
+        %td{:class => 'table_cell'}= feed.name.upcase

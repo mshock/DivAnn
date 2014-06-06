@@ -8,7 +8,7 @@ require 'logger'
 
 debug = false
 
-set :server, 'thin'
+set :server, 'webrick'
 
 gold_server = 'tt8'
 
@@ -27,7 +27,7 @@ end
 
 get '/tables' do
   @tables = Table.all(:order => :name)
-  @feeds = Feed.all(:order => :name)
+  @feeds = Feed.all(:order => :name, :enabled => true)
   haml :tables
 end
 
@@ -35,7 +35,7 @@ get '/tables/:server_id' do
   server_id = params[:server_id]
   
   @server = Server.get server_id
-  @feeds = Feed.all(:order => :name)
+  @feeds = Feed.all(:order => :name, :enabled => true)
   @tables = @server.tables.all(:order => :name)
 
   haml :tables
@@ -51,9 +51,13 @@ post '/tables' do
 end
 
 post '/get_tables' do
-  feed = Feed.get params[:feed]
-  @tables = Table.all(:order => :name, :feed => feed)
-  @feeds = Feed.all(:order => :name)
+  feed_id = params[:feed]
+  unless feed_id == 'all'
+    feed = Feed.get params[:feed]
+    @tables = Table.all(:order => :name, :feed => feed)
+  else 
+    @tables = Table.all(:order => :name)
+  end
   
   haml :tables_partial, :layout => false
 end
@@ -183,9 +187,13 @@ post '/get_feeds' do
 end
 
 post '/get_feeds2' do
-  server = Server.get params[:server_id]
-  
-  @feeds = Feed.all(:order => :name, :enabled => true, :server => server)
+  server_id = params[:server_id]
+  unless server_id == 'all'
+    server = Server.get server_id
+    @feeds = Feed.all(:order => :name, :server => server)
+  else 
+    @feeds = Feed.all(:order => :name)
+  end
   
   haml :feeds_partial2, :layout => false
 end

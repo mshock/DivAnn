@@ -1,6 +1,8 @@
 %h1= @server.nil? ? 'Tables' : "Tables for #{@server.name.upcase}"
 .server_select
+  %b Feed: 
   %select{:name => 'feed', :id => 'feed_select2'}
+    %option{:value => 'all'} All
     - @feeds.each do |feed|
       %option{:value => "#{feed.id}"}= feed.name.upcase
 %br

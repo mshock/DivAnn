@@ -1,6 +1,8 @@
 %h1 Feeds
 .server_select
+  %b Server: 
   %select{:name => 'server', :id => 'server_select2'}
+    %option{:value => 'all'} All
     - @servers.each do |server|
       %option{:value => "#{server.id}"}= server.name.upcase
 %br

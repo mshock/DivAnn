@@ -60,7 +60,7 @@ def create_count(server, dbname, tablename)
   if $db == 'tt8'
     feed = Feed.first(:name => dbname)
   else
-    feed = Feed.first_or_create({:name => dbname, :server => server}, {:enabled => true})   
+    feed = Feed.first_or_create({:name => dbname.downcase, :server => server}, {:enabled => true})   
   end
   table = Table.first_or_create({:name => tablename.downcase}, {:enabled => true, :feed => feed})
   ServerTable.first_or_create(:table => table, :server => server)
@@ -74,7 +74,7 @@ def create_nocount(server, dbname, tablename)
   if $db == 'tt8'
     feed = Feed.first(:name => dbname)
   else
-    feed = Feed.first_or_create({:name => dbname, :server => server}, {:enabled => true})   
+    feed = Feed.first_or_create({:name => dbname.downcase, :server => server}, {:enabled => true})   
   end
   table = Table.first_or_create({:name => tablename.downcase}, {:enabled => true, :feed => feed})
   ServerTable.first_or_create(:table => table, :server => server)
