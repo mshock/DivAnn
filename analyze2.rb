@@ -58,7 +58,7 @@ def create_count(server, dbname, tablename)
   STDOUT.flush 
   rowcount = DISDB.connection.select_value("select count_big(1) from #{dbname}.dbo.#{tablename} with (NOLOCK)")
   if $db == 'tt8'
-    feed = Feed.first(:name => dbname)
+    feed = Feed.first(:name => dbname.downcase)
   else
     feed = Feed.first_or_create({:name => dbname.downcase, :server => server}, {:enabled => true})   
   end
@@ -72,7 +72,7 @@ def create_nocount(server, dbname, tablename)
   print "#{dbname}.dbo.#{tablename} = "
   STDOUT.flush
   if $db == 'tt8'
-    feed = Feed.first(:name => dbname)
+    feed = Feed.first(:name => dbname.downcase)
   else
     feed = Feed.first_or_create({:name => dbname.downcase, :server => server}, {:enabled => true})   
   end

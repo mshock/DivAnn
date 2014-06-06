@@ -7,5 +7,5 @@
     - @servers.each do |server|
       %tr{:class => 'default'}
         %td
-          %a{:href => "/tables/#{server.id}"}= server.name
+          %a{:href => "/tables/#{server.id}"}= server.name.upcase
         %td= server.ip

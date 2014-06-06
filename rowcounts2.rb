@@ -149,12 +149,12 @@ post '/counts_json2' do
   
   logger.info('counts_json2') {"server: #{@server.name} feed: #{@feed.name}"}
   
-  puts "running counts for server: #{@server.name} feed: #{@feed.name}"
+  #puts "running counts for server: #{@server.name} feed: #{@feed.name}"
     
   system("rubyw analyze2.rb --server #{@server.name} --feed #{@feed.id}")
-  puts "done with #{@server.name}"
+ #puts "done with #{@server.name}"
   system("rubyw analyze2.rb --server #{@gold_server} --feed #{@feed.id}")
-  puts "done with #{@gold_server}"
+  #puts "done with #{@gold_server}"
    
   query = "
     select t.name, c1.count as rc1, c2.count as rc2, (c1.count - c2.count) as diff, c1.table_id as tabid, c1.timestamp as t1, c2.timestamp as t2

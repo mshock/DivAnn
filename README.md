@@ -19,7 +19,7 @@ Opts:
 - --server - target server from databases.yml
 - --initdb - drop and recreate database tables from DataMapper schema defs in /models
 - --debug - verbose reporting (datamapper, primarily)
-- --feed - target refresh for a server
+- --feed - target refresh feed for a server
 - --table - target refresh a table for a server
 - --nocount - initialize db metadata without running a count
 - --last - retrieve the last update to the gold server's db
