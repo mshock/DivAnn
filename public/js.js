@@ -7,11 +7,25 @@ $(document).ready(function(){
     $('#server_select').change(
     		function() {
     			e = this;
-    			console.log($(e).val());
 				$.post('/get_feeds', {server_id: $(e).val()})
 					.done(function (data) {
-						console.log(data);
 						$('#feed_select').html(data);
+					});
+    		});
+    $('#server_select2').change(
+    		function() {
+    			e = this;
+				$.post('/get_feeds2', {server_id: $(e).val()})
+					.done(function (data) {
+						$('#feed_table').html(data);
+					});
+    		});
+    $('#feed_select').change(
+    		function() {
+    			e = this;
+				$.post('/get_tables', {server_id: $(e).val()})
+					.done(function (data) {
+						$('#tables_table').html(data);
 					});
     		});
 });

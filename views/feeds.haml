@@ -1,11 +1,7 @@
 %h1 Feeds
-%table
-  %thead
-    %th toggle
-    %th feed
-  %tbody
-    - @feeds.each do |feed|
-      %tr{:class => "#{feed.enabled ? 'ok' : 'err'}",  :id => "#{feed.id}"}
-        %td{:class => 'button_cell'}
-          %input{:type => 'button', :value => "#{feed.enabled ? 'disable':'enable'}", :class => 'table_button', :onclick => "toggle_feed(this, #{feed.id})"}
-        %td{:class => 'table_cell'}= feed.name
+.server_select
+  %select{:name => 'server', :id => 'server_select2'}
+    - @servers.each do |server|
+      %option{:value => "#{server.id}"}= server.name.upcase
+%br
+= haml :feeds_partial2, :layout => false

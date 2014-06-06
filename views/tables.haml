@@ -1,11 +1,7 @@
-%h1= @server.nil? ? 'All Tables' : "Tables for #{@server.name.upcase}"
-%table
-  %thead
-    %th toggle
-    %th tablename
-  %tbody
-    - @tables.each do |table|
-      %tr{:class => "#{table.enabled ? 'ok' : 'err'}",  :id => "#{table.id}"}
-        %td{:class => 'button_cell'}
-          %input{:type => 'button', :value => "#{table.enabled ? 'disable':'enable'}", :class => 'table_button', :onclick => "toggle_table(this, #{table.id})"}
-        %td{:class => 'table_cell'}= table.name.upcase
+%h1= @server.nil? ? 'Tables' : "Tables for #{@server.name.upcase}"
+.server_select
+  %select{:name => 'feed', :id => 'feed_select2'}
+    - @feeds.each do |feed|
+      %option{:value => "#{feed.id}"}= feed.name.upcase
+%br
+= haml :tables_partial, :layout => false

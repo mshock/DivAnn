@@ -4,12 +4,15 @@ require 'data_mapper'
 require 'haml'
 require 'sinatra/reloader'
 require 'json'
+require 'logger'
 
-debug = true
+debug = false
 
-set :server, 'thin'
+set :server, 'webrick'
 
 gold_server = 'tt8'
+
+logger = Logger.new('log.txt', 'daily')
 
 if debug
   DataMapper::Logger.new($stdout, :debug)
@@ -24,29 +27,36 @@ end
 
 get '/tables' do
   @tables = Table.all(:order => :name)
-
+  @feeds = Feed.all(:order => :name)
   haml :tables
 end
 
 get '/tables/:server_id' do
   server_id = params[:server_id]
-  @server = Server.get server_id
   
+  @server = Server.get server_id
+  @feeds = Feed.all(:order => :name)
   @tables = @server.tables.all(:order => :name)
 
   haml :tables
 end
 
 post '/tables' do
-
   table = Table.get params[:table_id]
   if table.enabled
     table.update(:enabled => false)
   else
     table.update(:enabled => true)
   end
-
 end
+
+post '/get_tables' do
+  @tables = Table.all(:order => :name)
+  @feeds = Feed.all(:order => :name)
+  
+  haml :tables_partial, :layout => false
+end
+
 
 get '/counts' do
   @gold_server = gold_server
@@ -96,6 +106,8 @@ post '/counts_json' do
   server = Server.get params[:server]
   table = Table.get params[:table_id]
   
+  logger.info('counts_json') {"server: #{server.name} table: #{table.name}"}
+  
   system("rubyw analyze2.rb --server #{gold.name} --table #{table.id}")
   system("rubyw analyze2.rb --server #{server.name} --table #{table.id}")
   
@@ -130,7 +142,7 @@ post '/counts_json2' do
   @feed = Feed.get params[:feed_id]
   @feeds = Feed.all(:order => :name, :enabled => true)
   
-  @last = `rubyw analyze2.rb --last --server #{@gold_server}`
+  logger.info('counts_json2') {"server: #{@server.name} feed: #{@feed.name}"}
   
   puts "running counts for server: #{@server.name} feed: #{@feed.name}"
     
@@ -166,9 +178,15 @@ post '/get_feeds' do
   
   @feeds = Feed.all(:order => :name, :enabled => true, :server => server)
   
-  
-  
   haml :feeds_partial, :layout => false
+end
+
+post '/get_feeds2' do
+  server = Server.get params[:server_id]
+  
+  @feeds = Feed.all(:order => :name, :enabled => true, :server => server)
+  
+  haml :feeds_partial2, :layout => false
 end
 
 
@@ -179,16 +197,19 @@ end
 
 get '/feeds' do
   @feeds = Feed.all(:order => :name)
+  @servers = Server.all(:order => :name)
   haml :feeds 
 end
 
 post '/feeds' do
-
+  @servers = Server.all(:order => :name)
   feed = Feed.get params[:feed_id]
   if feed.enabled
     feed.update(:enabled => false)
+    feed.tables.update(:enabled => false)
   else
     feed.update(:enabled => true)
+    feed.tables.update(:enabled => false)
   end
 
 end

@@ -9,7 +9,7 @@
     %select{:name => 'server', :id => 'server_select'}
       - @servers.each do |server|
         %option{:value => "#{server.id}", :selected => @server.nil? ? false : (@server.id == server.id ? true : false)}= server.name.upcase
-    %b Feed ID:
+    %b Feed:
     %select{:name => 'feed', :id => 'feed_select'}
       - @feeds.each do |feed|
         %option{:value => "#{feed.id}", :selected => @feed.nil? ? false : (@feed.id == feed.id ? true : false)}= feed.name.upcase
@@ -20,5 +20,5 @@
     %img#loading{:src => 'loading.gif'}
     #results
       - unless @counts.nil?
-        = haml :counts_partial
+        = haml :counts_partial, :layout => false
     
