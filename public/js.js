@@ -20,10 +20,10 @@ $(document).ready(function(){
 						$('#feed_table').html(data);
 					});
     		});
-    $('#feed_select').change(
+    $('#feed_select2').change(
     		function() {
     			e = this;
-				$.post('/get_tables', {server_id: $(e).val()})
+				$.post('/get_tables', {feed: $(e).val()})
 					.done(function (data) {
 						$('#tables_table').html(data);
 					});

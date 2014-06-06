@@ -8,7 +8,7 @@ require 'logger'
 
 debug = false
 
-set :server, 'webrick'
+set :server, 'thin'
 
 gold_server = 'tt8'
 
@@ -51,7 +51,8 @@ post '/tables' do
 end
 
 post '/get_tables' do
-  @tables = Table.all(:order => :name)
+  feed = Feed.get params[:feed]
+  @tables = Table.all(:order => :name, :feed => feed)
   @feeds = Feed.all(:order => :name)
   
   haml :tables_partial, :layout => false
@@ -197,7 +198,7 @@ end
 
 get '/feeds' do
   @feeds = Feed.all(:order => :name)
-  @servers = Server.all(:order => :name)
+  @servers = Server.all(:order => :name, :name.not => gold_server)
   haml :feeds 
 end
 

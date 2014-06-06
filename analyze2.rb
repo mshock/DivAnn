@@ -57,7 +57,11 @@ def create_count(server, dbname, tablename)
   print "#{dbname}.dbo.#{tablename} = "
   STDOUT.flush 
   rowcount = DISDB.connection.select_value("select count_big(1) from #{dbname}.dbo.#{tablename} with (NOLOCK)")
-  feed = Feed.first_or_create({:name => dbname, :server => server}, {:enabled => true}) 
+  if $db == 'tt8'
+    feed = Feed.first(:name => dbname)
+  else
+    feed = Feed.first_or_create({:name => dbname, :server => server}, {:enabled => true})   
+  end
   table = Table.first_or_create({:name => tablename.downcase}, {:enabled => true, :feed => feed})
   ServerTable.first_or_create(:table => table, :server => server)
   Count.create(:count => rowcount, :timestamp => Time.now, :table => table, :server => server)
@@ -67,7 +71,11 @@ end
 def create_nocount(server, dbname, tablename)
   print "#{dbname}.dbo.#{tablename} = "
   STDOUT.flush
-  feed = Feed.first_or_create({:name => dbname, :server => server}, {:enabled => true}) 
+  if $db == 'tt8'
+    feed = Feed.first(:name => dbname)
+  else
+    feed = Feed.first_or_create({:name => dbname, :server => server}, {:enabled => true})   
+  end
   table = Table.first_or_create({:name => tablename.downcase}, {:enabled => true, :feed => feed})
   ServerTable.first_or_create(:table => table, :server => server)
   puts 'created'
@@ -92,7 +100,7 @@ unless opts[:feed].nil?
       print "qai_master.dbo.#{table.name} = "
       STDOUT.flush 
       rowcount = DISDB.connection.select_value("select count_big(1) from qai_master.dbo.#{table.name} with (NOLOCK)")
-      feed = Feed.first_or_create({:name => feed.name, :server => server}, {:enabled => true})
+      feed = Feed.first(:name => table.name.downcase)
       table = Table.first_or_create({:name => table.name.downcase}, {:enabled => true, :feed => feed})
       ServerTable.first_or_create(:table => table, :server => server)
       Count.create(:count => rowcount, :timestamp => Time.now, :table => table, :server => server)
