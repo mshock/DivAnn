@@ -18,7 +18,11 @@ Opts:
 
 - --server - target server from databases.yml
 - --initdb - drop and recreate database tables from DataMapper schema defs in /models
-- --debug - verbose reporting
+- --debug - verbose reporting (datamapper, primarily)
+- --feed - target refresh for a server
+- --table - target refresh a table for a server
+- --nocount - initialize db metadata without running a count
+- --last - retrieve the last update to the gold server's db
 
 #### required gems
 
@@ -28,3 +32,4 @@ Opts:
 - trollop - opts parsing
 - haml - for views
 - json - for dynamic web controls
+- logger - logging
