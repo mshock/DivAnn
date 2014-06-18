@@ -54,7 +54,8 @@ post '/get_tables' do
   feed_id = params[:feed]
   unless feed_id == 'all'
     feed = Feed.get params[:feed]
-    @tables = Table.all(:order => :name, :feed => feed)
+    
+    @tables = feed.tables.all(:order => :name)
   else 
     @tables = Table.all(:order => :name)
   end

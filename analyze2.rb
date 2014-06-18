@@ -28,8 +28,12 @@ if opts[:initdb]
   puts 'initializing database...'
   DataMapper.auto_migrate!
   puts 'done'
-  puts 'fetching infrastructure from servers'
-  
+  puts 'fetching infrastructure from servers...'
+  $dbconfig.each do |key, vals|
+    puts key
+    system("rubyw analyze2.rb --server #{key} --nocount")
+  end
+  puts 'done'
   exit
 end
 
