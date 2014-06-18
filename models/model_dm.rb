@@ -26,7 +26,7 @@ class Table
   has n, :servers, :through => :serverTables
   
   has n, :counts
-  belongs_to :feed
+  has n, :feeds, :through => :feedTables
   
 end
 
@@ -59,8 +59,17 @@ class Feed
   property :name, String
   property :enabled, Boolean
   
-  has n, :tables
+  has n, :tables, :through => :feedTables
   belongs_to :server
+end
+
+class FeedTable
+  include DataMapper::Resource
+  
+  property :id, Serial
+  
+  belongs_to :feed
+  belongs_to :table
 end
 
 

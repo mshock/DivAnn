@@ -28,6 +28,8 @@ if opts[:initdb]
   puts 'initializing database...'
   DataMapper.auto_migrate!
   puts 'done'
+  puts 'fetching infrastructure from servers'
+  
   exit
 end
 
@@ -62,7 +64,8 @@ def create_count(server, dbname, tablename)
   else
     feed = Feed.first_or_create({:name => dbname.downcase, :server => server}, {:enabled => true})   
   end
-  table = Table.first_or_create({:name => tablename.downcase}, {:enabled => true, :feed => feed})
+  table = Table.first_or_create({:name => tablename.downcase}, {:enabled => true})
+  FeedTable.first_or_create(:table => table, :feed => feed)
   ServerTable.first_or_create(:table => table, :server => server)
   Count.create(:count => rowcount, :timestamp => Time.now, :table => table, :server => server)
   puts rowcount
@@ -76,7 +79,8 @@ def create_nocount(server, dbname, tablename)
   else
     feed = Feed.first_or_create({:name => dbname.downcase, :server => server}, {:enabled => true})   
   end
-  table = Table.first_or_create({:name => tablename.downcase}, {:enabled => true, :feed => feed})
+  table = Table.first_or_create({:name => tablename.downcase}, {:enabled => true})
+  FeedTable.first_or_create(:table => table, :feed => feed)
   ServerTable.first_or_create(:table => table, :server => server)
   puts 'created'
 end
@@ -101,7 +105,8 @@ unless opts[:feed].nil?
       STDOUT.flush 
       rowcount = DISDB.connection.select_value("select count_big(1) from qai_master.dbo.#{table.name} with (NOLOCK)")
       feed = Feed.first(:name => table.name.downcase)
-      table = Table.first_or_create({:name => table.name.downcase}, {:enabled => true, :feed => feed})
+      table = Table.first_or_create({:name => table.name.downcase}, {:enabled => true})
+      FeedTable.first_or_create(:table => table, :feed => feed)
       ServerTable.first_or_create(:table => table, :server => server)
       Count.create(:count => rowcount, :timestamp => Time.now, :table => table, :server => server)
       puts rowcount

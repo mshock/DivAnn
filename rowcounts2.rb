@@ -93,10 +93,12 @@ post '/counts' do
     and c2.server_id = #{@server.id}
     and c1.timestamp = (select max(timestamp) from counts where table_id = c1.table_id and server_id = c1.server_id)
     and c2.timestamp = (select max(timestamp) from counts where table_id = c2.table_id and server_id = c2.server_id)
+    join feed_tables ft
+    on ft.feed_id = #{@feed.id}
     join tables t
     on c1.table_id = t.id
+    and ft.table_id = t.id
     and t.enabled = 't'
-    and t.feed_id = #{@feed.id}
     order by t.name
   "
    
@@ -165,10 +167,13 @@ post '/counts_json2' do
     and c2.server_id = #{@server.id}
     and c1.timestamp = (select max(timestamp) from counts where table_id = c1.table_id and server_id = c1.server_id)
     and c2.timestamp = (select max(timestamp) from counts where table_id = c2.table_id and server_id = c2.server_id)
+    join feed_tables ft
+    on 
+    ft.feed_id = #{@feed.id}
     join tables t
-    on c1.table_id = t.id
-    and t.enabled = 't'
-    and t.feed_id = #{@feed.id}
+    on ft.table_id = t.id
+    and c1.table_id = t.id
+    and t.enabled = 't' 
     order by t.name
   "
   
